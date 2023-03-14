@@ -66,7 +66,7 @@ def put_user(db: Session, user: schemas.UserUpdate):
     db.commit()
     return {"message": "User updated successfully"}
 
-def remove_user(db, id: int):
+def remove_user(db: Session, id: int):
     db.query(models.User).filter(models.User.id == id).delete()
     db.commit()
     return {"message": "User deleted successfully."}
@@ -94,7 +94,7 @@ def put_country(db: Session, country: schemas.CountryUpdate):
     db.commit()
     return {"message": "Country updated successfully"}
 
-def remove_country(db, id: int):
+def remove_country(db: Session, id: int):
     db.query(models.Country).filter(models.Country.id == id).delete()
     db.commit()
     return {"message": "Country deleted successfully."}
@@ -122,7 +122,7 @@ def put_city(db: Session, city: schemas.CityUpdate):
     db.commit()
     return {"message": "City updated successfully"}
 
-def remove_city(db, id: int):
+def remove_city(db: Session, id: int):
     db.query(models.City).filter(models.City.id == id).delete()
     db.commit()
     return {"message": "City deleted successfully"}
