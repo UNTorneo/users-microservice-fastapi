@@ -9,3 +9,4 @@ docker container stop CONTAINER_ID
 d88d14d2bca01e46e9a870f7f8a7333f23ed193f0e8ab0d917eab8a4dc8f3c88
 
 uvicorn app.main:app --reload
+http://127.0.0.1:8080/docs
