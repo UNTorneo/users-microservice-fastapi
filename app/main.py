@@ -1,10 +1,12 @@
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
-
 from datetime import date, timedelta
-from . import crud, models, schemas
-from .database import SessionLocal, engine
 from fastapi.security import OAuth2PasswordRequestForm
+
+from app.models import models 
+from app.controller import crud
+from app.controller.database import engine, SessionLocal
+from app.models import schemas
 
 models.Base.metadata.create_all(bind=engine)
 

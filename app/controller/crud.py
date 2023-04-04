@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
-
-from . import models, schemas
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import jwt
+from app.models import models 
+from app.models import schemas 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
