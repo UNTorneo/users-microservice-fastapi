@@ -5,124 +5,124 @@ from jose import jwt
 from app.models import models 
 from app.models import schemas 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwdContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-SECRET_KEY = "7c3fc4a49a24f44f57b24245767f7e1703f5100c7a46a48df5b67fe2df2b1870"
-ALGORITHM = "HS256"
+secretKey = "7c3fc4a49a24f44f57b24245767f7e1703f5100c7a46a48df5b67fe2df2b1870"
+algorithm = "HS256"
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def verifyPassword(plainPassword, hashedPassword):
+    return pwdContext.verify(plainPassword, hashedPassword)
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def getPasswordHash(password):
+    return pwdContext.hash(password)
 
-def authenticate_user(db: Session, email: str, password: str):
-    user = get_user_by_email(db, email=email)
+def authenticateUser(db: Session, email: str, password: str):
+    user = getUserByEmail(db, email=email)
     if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
+        return None
+    if not verifyPassword(password, user.hashedPassword):
+        return None
     return user
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+def createAccessToken(data: dict, expiresDelta: timedelta | None = None):
+    toEncode = data.copy()
+    if expiresDelta:
+        expire = datetime.utcnow() + expiresDelta
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    toEncode.update({"exp": expire})
+    encodedJwt = jwt.encode(toEncode, secretKey, algorithm=algorithm)
+    return encodedJwt
 
-def create_user(db: Session, user: schemas.UserCreate):
-    password_hashed = get_password_hash(user.password)
-    db_user = models.User(username=user.username, hashed_password=password_hashed, email=user.email, birthday=user.birthday,
-                          country_id=user.country_id, city_id=user.city_id, latitude=user.latitude, longitude=user.longitude)
-    db.add(db_user)
+def createUser(db: Session, user: schemas.UserCreate):
+    passwordHashed = getPasswordHash(user.password)
+    dbUser = models.User(username=user.username, hashedPassword=passwordHashed, email=user.email, birthday=user.birthday,
+                          countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude)
+    db.add(dbUser)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(dbUser)
+    return dbUser
 
-def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+def getUser(db: Session, userId: int):
+    return db.query(models.User).filter(models.User.id == userId).first()
 
-def get_user_by_email(db: Session, email: str):
+def getUserByEmail(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
+def getUsers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def put_user(db: Session, user: schemas.UserUpdate):
-    db_user = get_user(db, user.id)
-    password_hashed = get_password_hash(user.password)
-    db_user.username = user.username
-    db_user.hashed_password = password_hashed
-    db_user.email = user.email
-    db_user.birthday = user.birthday
-    db_user.country_id = user.country_id
-    db_user.city_id = user.city_id
-    db_user.latitude = user.latitude
-    db_user.longitude = user.longitude
+def putUser(db: Session, user: schemas.UserUpdate):
+    dbUser = getUser(db, user.id)
+    passwordHashed = getPasswordHash(user.password)
+    dbUser.username = user.username
+    dbUser.hashedPassword = passwordHashed
+    dbUser.email = user.email
+    dbUser.birthday = user.birthday
+    dbUser.countryId = user.countryId
+    dbUser.cityId = user.cityId
+    dbUser.latitude = user.latitude
+    dbUser.longitude = user.longitude
     db.commit()
     return {"message": "User updated successfully"}
 
-def remove_user(db: Session, id: int):
+def removeUser(db: Session, id: int):
     db.query(models.User).filter(models.User.id == id).delete()
     db.commit()
     return {"message": "User deleted successfully."}
 
 
-def create_country(db: Session, country: schemas.CountryCreate):
-    db_country = models.Country(name=country.name)
-    db.add(db_country)
+def createCountry(db: Session, country: schemas.CountryCreate):
+    dbCountry = models.Country(name=country.name)
+    db.add(dbCountry)
     db.commit()
-    db.refresh(db_country)
-    return db_country
+    db.refresh(dbCountry)
+    return dbCountry
 
-def get_country(db: Session, country_id: int):
-    return db.query(models.Country).filter(models.Country.id == country_id).first()
+def getCountry(db: Session, countryId: int):
+    return db.query(models.Country).filter(models.Country.id == countryId).first()
 
-def get_country_by_name(db: Session, name: str):
+def getCountryByName(db: Session, name: str):
     return db.query(models.Country).filter(models.Country.name == name).first()
 
-def get_countries(db: Session, skip: int = 0, limit: int = 100):
+def getCountries(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Country).offset(skip).limit(limit).all()
 
-def put_country(db: Session, country: schemas.CountryUpdate):
-    db_country = get_country(db, country.id)
-    db_country.name = country.name
+def putCountry(db: Session, country: schemas.CountryUpdate):
+    dbCountry = getCountry(db, country.id)
+    dbCountry.name = country.name
     db.commit()
     return {"message": "Country updated successfully"}
 
-def remove_country(db: Session, id: int):
+def removeCountry(db: Session, id: int):
     db.query(models.Country).filter(models.Country.id == id).delete()
     db.commit()
     return {"message": "Country deleted successfully."}
 
 
-def create_city(db: Session, city: schemas.CityCreate):
-    db_city = models.City(name=city.name)
-    db.add(db_city)
+def createCity(db: Session, city: schemas.CityCreate):
+    dbCity = models.City(name=city.name)
+    db.add(dbCity)
     db.commit()
-    db.refresh(db_city)
-    return db_city
+    db.refresh(dbCity)
+    return dbCity
 
-def get_city(db: Session, city_id: int):
-    return db.query(models.City).filter(models.City.id == city_id).first()
+def getCity(db: Session, cityId: int):
+    return db.query(models.City).filter(models.City.id == cityId).first()
 
-def get_city_by_name(db: Session, name: str):
+def getCityByName(db: Session, name: str):
     return db.query(models.City).filter(models.City.name == name).first()
 
-def get_cities(db: Session, skip: int = 0, limit: int = 100):
+def getCities(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.City).offset(skip).limit(limit).all()
 
-def put_city(db: Session, city: schemas.CityUpdate):
-    db_city = get_city(db, city.id)
-    db_city.name = city.name
+def putCity(db: Session, city: schemas.CityUpdate):
+    dbCity = getCity(db, city.id)
+    dbCity.name = city.name
     db.commit()
     return {"message": "City updated successfully"}
 
-def remove_city(db: Session, id: int):
+def removeCity(db: Session, id: int):
     db.query(models.City).filter(models.City.id == id).delete()
     db.commit()
     return {"message": "City deleted successfully"}

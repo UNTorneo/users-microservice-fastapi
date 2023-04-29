@@ -2,8 +2,8 @@ from datetime import date
 from pydantic import BaseModel
 
 class Token(BaseModel):
-    access_token: str
-    token_type: str
+    accessToken: str
+    tokenType: str
 
 class Login(BaseModel):
     email: str
@@ -13,8 +13,8 @@ class UserBase(BaseModel):
     username : str
     birthday : date
     email: str
-    country_id : int
-    city_id : int
+    countryId : int
+    cityId : int
     latitude : float
     longitude : float 
 
@@ -28,7 +28,7 @@ class UserUpdate(UserBase):
 
 class User(UserBase):
     id: int 
-    is_active: bool
+    isActive: bool
 
     class Config:
         orm_mode = True

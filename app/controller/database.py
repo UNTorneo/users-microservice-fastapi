@@ -3,15 +3,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-DB_NAME = os.environ.get('DB_NAME') or 'fastapi_db'
-DB_USER = os.environ.get('DB_USER') or 'fastapi'
-DB_PASSWORD = os.environ.get('DB_PASSWORD') or '123'
-DB_HOST = os.environ.get('DB_HOST') or 'localhost'
-SQLALCHEMY_DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+dbName = os.environ.get('dbName') or 'fastapi_db'
+dbUser = os.environ.get('dbUser') or 'fastapi'
+dbPassword = os.environ.get('dbPassword') or '123'
+dbHost = os.environ.get('dbHost') or 'localhost'
+sqlalchemyDatabaseUrl = f"postgresql://{dbUser}:{dbPassword}@{dbHost}/{dbName}"
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL
+    sqlalchemyDatabaseUrl
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+base = declarative_base()
