@@ -41,7 +41,7 @@ def createUser(db: Session, user: schemas.UserCreate):
     db.add(dbUser)
     db.commit()
     db.refresh(dbUser)
-    return dbUser
+    return {"message": "User created successfully"}
 
 def getUser(db: Session, userId: int):
     return db.query(models.User).filter(models.User.id == userId).first()
@@ -77,7 +77,7 @@ def createCountry(db: Session, country: schemas.CountryCreate):
     db.add(dbCountry)
     db.commit()
     db.refresh(dbCountry)
-    return dbCountry
+    return {"message": "Country created successfully"}
 
 def getCountry(db: Session, countryId: int):
     return db.query(models.Country).filter(models.Country.id == countryId).first()
@@ -105,7 +105,7 @@ def createCity(db: Session, city: schemas.CityCreate):
     db.add(dbCity)
     db.commit()
     db.refresh(dbCity)
-    return dbCity
+    return {"message": "City created successfully"}
 
 def getCity(db: Session, cityId: int):
     return db.query(models.City).filter(models.City.id == cityId).first()
