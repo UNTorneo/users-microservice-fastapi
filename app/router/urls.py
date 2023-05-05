@@ -7,6 +7,8 @@ from app.controller.database import sessionLocal
 from app.models import schemas
 from fastapi import APIRouter
 
+from app.models.response import ResponseModel
+
 router = APIRouter()
 
 accessTokenExpireMinutes = 30
@@ -34,7 +36,7 @@ async def loginForAccessToken(user: schemas.Login, db: Session = Depends(getDb))
     )
     return {"accessToken": accessToken, "tokenType": "bearer"}
 
-@router.post("/users/", response_model=schemas.User)
+@router.post("/users/", response_model=ResponseModel)
 def createUser(user: schemas.UserCreate, db: Session = Depends(getDb)):
     dbUser = crud.getUserByEmail(db, email=user.email)
     if dbUser:
@@ -53,14 +55,14 @@ def readUser(userId: int, db: Session = Depends(getDb)):
         raise HTTPException(status_code=404, detail="User not found")
     return dbUser
 
-@router.put("/users/{usersId}")
+@router.put("/users/{usersId}", response_model=ResponseModel)
 def updateUser(user:schemas.UserUpdate, db: Session = Depends(getDb)):  
     dbUser = db.query(models.User).filter(models.User.id == user.id).first()
     if dbUser is None:
         raise HTTPException(status_code=404, detail="User not found")
     return crud.putUser(db=db, user=user)
 
-@router.delete("/users/{userId}")
+@router.delete("/users/{userId}", response_model=ResponseModel)
 def deleteUser(userId: int, db: Session = Depends(getDb)):
     dbUser = crud.getUser(db, userId=userId)
     if dbUser is None:
@@ -68,7 +70,7 @@ def deleteUser(userId: int, db: Session = Depends(getDb)):
     return crud.removeUser(db=db, id=userId)
 
 
-@router.post("/countries/", response_model=schemas.Country)
+@router.post("/countries/", response_model=ResponseModel)
 def createCountry(country: schemas.CountryCreate, db: Session = Depends(getDb)):
     dbCountry = crud.getCountryByName(db, name=country.name)
     if dbCountry:
@@ -87,14 +89,14 @@ def readCountry(countryId: int, db: Session = Depends(getDb)):
         raise HTTPException(status_code=404, detail="Country not found")
     return dbCountry
 
-@router.put("/countries/{countryId}")
+@router.put("/countries/{countryId}", response_model=ResponseModel)
 def updateCountry(country: schemas.CountryUpdate, db: Session = Depends(getDb)):
     dbCountry = db.query(models.Country).filter(models.Country.id == country.id).first()
     if dbCountry is None:
         raise HTTPException(status_code=404, detail="Country not found")
     return crud.putCountry(db=db, country=country)
 
-@router.delete("/countries/{countryId}")
+@router.delete("/countries/{countryId}", response_model=ResponseModel)
 def deleteCountry(countryId: int, db: Session = Depends(getDb)):
     dbCountry = crud.getCountry(db, countryId=countryId)
     if dbCountry is None:
@@ -102,7 +104,7 @@ def deleteCountry(countryId: int, db: Session = Depends(getDb)):
     return crud.removeCountry(db=db, id=countryId)
 
 
-@router.post("/cities/", response_model=schemas.City)
+@router.post("/cities/", response_model=ResponseModel)
 def createCity(city: schemas.CityCreate, db: Session = Depends(getDb)):
     dbCity = crud.getCityByName(db, name=city.name)
     if dbCity:
@@ -121,14 +123,14 @@ def readCity(cityId: int, db: Session = Depends(getDb)):
         raise HTTPException(status_code=404, detail="City not found")
     return dbCity
 
-@router.put("/cities/{cityId}")
+@router.put("/cities/{cityId}", response_model=ResponseModel)
 def updateCity(city: schemas.CityUpdate, db: Session = Depends(getDb)):
     dbCity = crud.getCity(db, cityId=city.id)
     if dbCity is None:
         raise HTTPException(status_code=404, detail="City not found")
     return crud.putCity(db=db, city=city)
 
-@router.delete("/cities/{cityId}")
+@router.delete("/cities/{cityId}", response_model=ResponseModel)
 def deleteCity(cityId: int, db: Session = Depends(getDb)):
     dbCity = crud.getCity(db, cityId=cityId)
     if dbCity is None:

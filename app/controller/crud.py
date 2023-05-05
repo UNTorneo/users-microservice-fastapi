@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from jose import jwt
 from app.models import models 
 from app.models import schemas 
+from app.models.response import ResponseModel 
 
 pwdContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -34,14 +35,14 @@ def createAccessToken(data: dict, expiresDelta: timedelta | None = None):
     encodedJwt = jwt.encode(toEncode, secretKey, algorithm=algorithm)
     return encodedJwt
 
-def createUser(db: Session, user: schemas.UserCreate):
+def createUser(db: Session, user: schemas.UserCreate)-> ResponseModel:
     passwordHashed = getPasswordHash(user.password)
     dbUser = models.User(username=user.username, hashedPassword=passwordHashed, email=user.email, birthday=user.birthday,
                           countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude)
     db.add(dbUser)
     db.commit()
     db.refresh(dbUser)
-    return {"message": "User created successfully"}
+    return ResponseModel(message="Usuario creado exitosamente")
 
 def getUser(db: Session, userId: int):
     return db.query(models.User).filter(models.User.id == userId).first()
@@ -52,7 +53,7 @@ def getUserByEmail(db: Session, email: str):
 def getUsers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def putUser(db: Session, user: schemas.UserUpdate):
+def putUser(db: Session, user: schemas.UserUpdate)-> ResponseModel:
     dbUser = getUser(db, user.id)
     passwordHashed = getPasswordHash(user.password)
     dbUser.username = user.username
@@ -64,20 +65,20 @@ def putUser(db: Session, user: schemas.UserUpdate):
     dbUser.latitude = user.latitude
     dbUser.longitude = user.longitude
     db.commit()
-    return {"message": "User updated successfully"}
+    return ResponseModel(message="Usuario actualizado exitosamente")
 
-def removeUser(db: Session, id: int):
+def removeUser(db: Session, id: int)-> ResponseModel:
     db.query(models.User).filter(models.User.id == id).delete()
     db.commit()
-    return {"message": "User deleted successfully."}
+    return ResponseModel(message="Usuario eliminado exitosamente")
 
 
-def createCountry(db: Session, country: schemas.CountryCreate):
+def createCountry(db: Session, country: schemas.CountryCreate)-> ResponseModel:
     dbCountry = models.Country(name=country.name)
     db.add(dbCountry)
     db.commit()
     db.refresh(dbCountry)
-    return {"message": "Country created successfully"}
+    return ResponseModel(message="País creado exitosamente")
 
 def getCountry(db: Session, countryId: int):
     return db.query(models.Country).filter(models.Country.id == countryId).first()
@@ -88,24 +89,24 @@ def getCountryByName(db: Session, name: str):
 def getCountries(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Country).offset(skip).limit(limit).all()
 
-def putCountry(db: Session, country: schemas.CountryUpdate):
+def putCountry(db: Session, country: schemas.CountryUpdate)-> ResponseModel:
     dbCountry = getCountry(db, country.id)
     dbCountry.name = country.name
     db.commit()
-    return {"message": "Country updated successfully"}
+    return ResponseModel(message="País actualizado exitosamente")
 
-def removeCountry(db: Session, id: int):
+def removeCountry(db: Session, id: int)-> ResponseModel:
     db.query(models.Country).filter(models.Country.id == id).delete()
     db.commit()
-    return {"message": "Country deleted successfully."}
+    return ResponseModel(message="País eliminado exitosamente")
 
 
-def createCity(db: Session, city: schemas.CityCreate):
+def createCity(db: Session, city: schemas.CityCreate)-> ResponseModel:
     dbCity = models.City(name=city.name)
     db.add(dbCity)
     db.commit()
     db.refresh(dbCity)
-    return {"message": "City created successfully"}
+    return ResponseModel(message="Ciudad creada exitosamente")
 
 def getCity(db: Session, cityId: int):
     return db.query(models.City).filter(models.City.id == cityId).first()
@@ -116,13 +117,13 @@ def getCityByName(db: Session, name: str):
 def getCities(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.City).offset(skip).limit(limit).all()
 
-def putCity(db: Session, city: schemas.CityUpdate):
+def putCity(db: Session, city: schemas.CityUpdate)-> ResponseModel:
     dbCity = getCity(db, city.id)
     dbCity.name = city.name
     db.commit()
-    return {"message": "City updated successfully"}
+    return ResponseModel(message="Ciudad actualizada exitosamente")
 
-def removeCity(db: Session, id: int):
+def removeCity(db: Session, id: int)-> ResponseModel:
     db.query(models.City).filter(models.City.id == id).delete()
     db.commit()
-    return {"message": "City deleted successfully"}
+    return ResponseModel(message="Ciudad eliminada exitosamente")
