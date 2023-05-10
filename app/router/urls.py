@@ -37,7 +37,7 @@ async def loginForAccessToken(user: schemas.Login, db: Session = Depends(getDb))
 def createUser(user: schemas.UserCreate, db: Session = Depends(getDb)):
     dbUser = crud.getUserByEmail(db, email=user.email)
     if dbUser:
-        raise Failure(status_code=400, detail="Email ya registrado")
+        raise Failure(status_code=403, detail="Email ya registrado")
     return crud.createUser(db=db, user=user)
 
 @router.get("/users", response_model=list[schemas.User])
@@ -71,7 +71,7 @@ def deleteUser(userId: int, db: Session = Depends(getDb)):
 def createCountry(country: schemas.CountryCreate, db: Session = Depends(getDb)):
     dbCountry = crud.getCountryByName(db, name=country.name)
     if dbCountry:
-        raise Failure(status_code=400, detail="País ya registrado")
+        raise Failure(status_code=403, detail="País ya registrado")
     return crud.createCountry(db=db, country=country)
 
 @router.get("/countries", response_model=list[schemas.Country])
@@ -105,7 +105,7 @@ def deleteCountry(countryId: int, db: Session = Depends(getDb)):
 def createCity(city: schemas.CityCreate, db: Session = Depends(getDb)):
     dbCity = crud.getCityByName(db, name=city.name)
     if dbCity:
-        raise Failure(status_code=400, detail="Ciudad ya registrada")
+        raise Failure(status_code=403, detail="Ciudad ya registrada")
     return crud.createCity(db=db, city=city)
 
 @router.get("/cities", response_model=list[schemas.City])
