@@ -6,7 +6,7 @@ Crear imagen
 docker build -t users-ms .
 
 Valentina
-docker run -p 8080:8080 -e dbHost=172.17.0.2 -e dbPort=5432 -e dbUser=fastapi -e dbPassword=123 -e dbName=fastapi_db -d users-ms
+docker run -p 8080:8080 -e dbHost=172.17.0.2 -e dbPort=5432 -e dbUser=fastapi -e dbPassword=123 -e dbName=fastapi_db -d --name users-ms users-ms
 
 Sebastian
 docker run -p 8080:8080 -e dbHost=172.17.0.3 -e dbPort=5431 -e dbUser=fastapi -e dbPassword=123 -e dbName=fastapi_db --name users-ms users-ms
