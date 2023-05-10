@@ -3,7 +3,6 @@ from pydantic import BaseModel
 
 class Token(BaseModel):
     accessToken: str
-    tokenType: str
 
 class Login(BaseModel):
     email: str

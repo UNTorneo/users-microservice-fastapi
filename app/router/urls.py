@@ -31,7 +31,7 @@ async def loginForAccessToken(user: schemas.Login, db: Session = Depends(getDb))
     accessToken = crud.createAccessToken(
         data={"sub": dbUser.email}, expiresDelta=accessTokenExpires
     )
-    return Token(accessToken=accessToken, tokenType="bearer")
+    return Token(accessToken=accessToken)
 
 @router.post("/users", response_model=ResponseModel)
 def createUser(user: schemas.UserCreate, db: Session = Depends(getDb)):
