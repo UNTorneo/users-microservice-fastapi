@@ -22,8 +22,14 @@ class UserCreate(UserBase):
     password: str
 
 class UserUpdate(UserBase):
-    id: int 
-    password: str
+    password: str | None = None
+    username: str | None = None
+    birthday: date | None = None
+    email: str | None = None
+    countryId: int | None = None
+    cityId: int | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
 class User(UserBase):
     id: int 
@@ -40,7 +46,7 @@ class CountryCreate(CountryBase):
     pass
 
 class CountryUpdate(CountryBase):
-    id: int 
+    pass
 
 class Country(CountryBase):
     id: int

@@ -71,14 +71,15 @@ def readUser(userId: int, db: Session = Depends(getDb)):
         raise e
     except Exception as e:
         raise Failure(detail=str(e), status_code=500)
-
+# TODO: FIX
 @router.put("/users/{usersId}", response_model=ResponseModel)
-def updateUser(user:schemas.UserUpdate, db: Session = Depends(getDb)):  
+def updateUser(usersId: int, user: schemas.UserUpdate, db: Session = Depends(getDb)):
     try:
-        dbUser = db.query(models.User).filter(models.User.id == user.id).first()
+        dbUser = db.query(models.User).filter(
+            models.User.id == usersId).first()
         if dbUser is None:
             raise Failure(status_code=404, detail="Usuario no encontrado")
-        return crud.putUser(db=db, user=user)
+        return crud.putUser(db=db, user=user, usersId=usersId)
     except Failure as e:
         raise e
     except Exception as e:
@@ -130,14 +131,15 @@ def readCountry(countryId: int, db: Session = Depends(getDb)):
         raise e
     except Exception as e:
         raise Failure(detail=str(e), status_code=500)
-
+#TODO: FIX
 @router.put("/countries/{countryId}", response_model=ResponseModel)
-def updateCountry(country: schemas.CountryUpdate, db: Session = Depends(getDb)):
+def updateCountry(countryId: int, country: schemas.CountryUpdate, db: Session = Depends(getDb)):
     try:
-        dbCountry = db.query(models.Country).filter(models.Country.id == country.id).first()
+        dbCountry = db.query(models.Country).filter(
+            models.Country.id == countryId).first()
         if dbCountry is None:
             raise Failure(status_code=404, detail="País no encontrado")
-        return crud.putCountry(db=db, country=country)
+        return crud.putCountry(db=db, country=country, id=countryId)
     except Failure as e:
         raise e
     except Exception as e:

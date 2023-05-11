@@ -53,17 +53,17 @@ def getUserByEmail(db: Session, email: str):
 def getUsers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def putUser(db: Session, user: schemas.UserUpdate)-> ResponseModel:
-    dbUser = getUser(db, user.id)
-    passwordHashed = getPasswordHash(user.password)
-    dbUser.username = user.username
-    dbUser.hashedPassword = passwordHashed
-    dbUser.email = user.email
-    dbUser.birthday = user.birthday
-    dbUser.countryId = user.countryId
-    dbUser.cityId = user.cityId
-    dbUser.latitude = user.latitude
-    dbUser.longitude = user.longitude
+
+def putUser(db: Session, user: schemas.UserUpdate, usersId: int) -> ResponseModel:
+    dbUser = getUser(db, usersId)
+    if user.password: dbUser.hashedPassword = getPasswordHash(user.password)
+    if user.username: dbUser.username = user.username
+    if user.email: dbUser.email = user.email
+    if user.birthday: dbUser.birthday = user.birthday
+    if user.countryId: dbUser.countryId = user.countryId
+    if user.cityId: dbUser.cityId = user.cityId
+    if user.latitude: dbUser.latitude = user.latitude
+    if user.longitude: dbUser.longitude = user.longitude
     db.commit()
     return ResponseModel(message="Usuario actualizado exitosamente")
 
@@ -89,8 +89,9 @@ def getCountryByName(db: Session, name: str):
 def getCountries(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Country).offset(skip).limit(limit).all()
 
-def putCountry(db: Session, country: schemas.CountryUpdate)-> ResponseModel:
-    dbCountry = getCountry(db, country.id)
+
+def putCountry(db: Session, country: schemas.CountryUpdate, id: int) -> ResponseModel:
+    dbCountry = getCountry(db, id)
     dbCountry.name = country.name
     db.commit()
     return ResponseModel(message="País actualizado exitosamente")
