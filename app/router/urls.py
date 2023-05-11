@@ -191,12 +191,12 @@ def readCity(cityId: int, db: Session = Depends(getDb)):
         raise Failure(detail=str(e), status_code=500)
 
 @router.put("/cities/{cityId}", response_model=ResponseModel)
-def updateCity(city: schemas.CityUpdate, db: Session = Depends(getDb)):
+def updateCity(cityId: int, city: schemas.CityBase, db: Session = Depends(getDb)):
     try:
-        dbCity = crud.getCity(db, cityId=city.id)
+        dbCity = crud.getCity(db, cityId=cityId)
         if dbCity is None:
             raise Failure(status_code=404, detail="Ciudad no encontrada")
-        return crud.putCity(db=db, city=city)
+        return crud.putCity(db=db, city=city, id=cityId)
     except Failure as e:
         raise e
     except Exception as e:

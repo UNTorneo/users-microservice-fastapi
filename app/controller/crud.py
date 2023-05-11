@@ -117,8 +117,9 @@ def getCityByName(db: Session, name: str):
 def getCities(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.City).offset(skip).limit(limit).all()
 
-def putCity(db: Session, city: schemas.CityUpdate)-> ResponseModel:
-    dbCity = getCity(db, city.id)
+
+def putCity(db: Session, city: schemas.CityBase, id: int) -> ResponseModel:
+    dbCity = getCity(db, id)
     dbCity.name = city.name
     db.commit()
     return ResponseModel(message="Ciudad actualizada exitosamente")
