@@ -16,6 +16,7 @@ class UserBase(BaseModel):
     cityId : int
     latitude : float
     longitude : float 
+    photoUrl: str | None = None
 
 
 class UserCreate(UserBase):

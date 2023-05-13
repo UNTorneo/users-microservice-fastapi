@@ -37,8 +37,11 @@ def createAccessToken(data: dict, expiresDelta: timedelta | None = None):
 
 def createUser(db: Session, user: schemas.UserCreate)-> ResponseModel:
     passwordHashed = getPasswordHash(user.password)
-    dbUser = models.User(username=user.username, hashedPassword=passwordHashed, email=user.email, birthday=user.birthday,
-                          countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude)
+    dbUser = models.User(
+        username=user.username, hashedPassword=passwordHashed, email=user.email, birthday=user.birthday,
+        countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude, 
+        photoUrl=user.photoUrl
+        )
     db.add(dbUser)
     db.commit()
     db.refresh(dbUser)
@@ -64,6 +67,7 @@ def putUser(db: Session, user: schemas.UserUpdate, usersId: int) -> ResponseMode
     if user.cityId: dbUser.cityId = user.cityId
     if user.latitude: dbUser.latitude = user.latitude
     if user.longitude: dbUser.longitude = user.longitude
+    if user.photoUrl: dbUser.photoUrl = user.photoUrl
     db.commit()
     return ResponseModel(message="Usuario actualizado exitosamente")
 
