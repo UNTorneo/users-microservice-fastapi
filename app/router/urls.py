@@ -71,7 +71,7 @@ def readUser(userId: int, db: Session = Depends(getDb)):
         raise e
     except Exception as e:
         raise Failure(detail=str(e), status_code=500)
-# TODO: FIX
+
 @router.put("/users/{usersId}", response_model=ResponseModel)
 def updateUser(usersId: int, user: schemas.UserUpdate, db: Session = Depends(getDb)):
     try:

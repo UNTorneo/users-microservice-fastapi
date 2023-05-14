@@ -38,10 +38,10 @@ def createAccessToken(data: dict, expiresDelta: timedelta | None = None):
 def createUser(db: Session, user: schemas.UserCreate)-> ResponseModel:
     passwordHashed = getPasswordHash(user.password)
     dbUser = models.User(
-        username=user.username, hashedPassword=passwordHashed, email=user.email, birthday=user.birthday,
-        countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude, 
+        name=user.name, lastName=user.lastName, username=user.username, hashedPassword=passwordHashed, email=user.email, 
+        birthday=user.birthday,countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude, 
         photoUrl=user.photoUrl
-        )
+    )
     db.add(dbUser)
     db.commit()
     db.refresh(dbUser)
@@ -59,6 +59,8 @@ def getUsers(db: Session, skip: int = 0, limit: int = 100):
 
 def putUser(db: Session, user: schemas.UserUpdate, usersId: int) -> ResponseModel:
     dbUser = getUser(db, usersId)
+    if user.name: dbUser.name = user.name
+    if user.lastName: dbUser.lastName = user.lastName
     if user.password: dbUser.hashedPassword = getPasswordHash(user.password)
     if user.username: dbUser.username = user.username
     if user.email: dbUser.email = user.email

@@ -9,6 +9,8 @@ class Login(BaseModel):
     password: str
 
 class UserBase(BaseModel):
+    name : str
+    lastName : str
     username : str
     birthday : date
     email: str
@@ -23,6 +25,8 @@ class UserCreate(UserBase):
     password: str
 
 class UserUpdate(UserBase):
+    name : str | None = None
+    lastName : str | None = None
     password: str | None = None
     username: str | None = None
     birthday: date | None = None
@@ -31,6 +35,7 @@ class UserUpdate(UserBase):
     cityId: int | None = None
     latitude: float | None = None
     longitude: float | None = None
+    photoUrl: str | None = None
 
 class User(UserBase):
     id: int 
