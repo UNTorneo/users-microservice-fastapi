@@ -1,7 +1,6 @@
 from datetime import date
 from pydantic import BaseModel
 
-
 class Token(BaseModel):
     accessToken: str
 
@@ -22,11 +21,6 @@ class UserBase(BaseModel):
     latitude: float
     longitude: float
     photoUrl: str | None = None
-
-
-class LoginModel(BaseModel):
-    accessToken: str
-    user: UserBase
 
 
 class UserCreate(UserBase):
@@ -91,3 +85,7 @@ class City(CityBase):
 
     class Config:
         orm_mode = True
+
+class LoginModel(BaseModel):
+    accessToken: str
+    user: User
