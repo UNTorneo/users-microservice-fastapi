@@ -1,32 +1,41 @@
 from datetime import date
 from pydantic import BaseModel
 
+
 class Token(BaseModel):
     accessToken: str
+
 
 class Login(BaseModel):
     email: str
     password: str
 
+
 class UserBase(BaseModel):
-    name : str
-    lastName : str
-    username : str
-    birthday : date
+    name: str
+    lastName: str
+    username: str
+    birthday: date
     email: str
-    countryId : int
-    cityId : int
-    latitude : float
-    longitude : float 
+    countryId: int
+    cityId: int
+    latitude: float
+    longitude: float
     photoUrl: str | None = None
+
+
+class LoginModel(BaseModel):
+    accessToken: str
+    user: UserBase
 
 
 class UserCreate(UserBase):
     password: str
 
+
 class UserUpdate(UserBase):
-    name : str | None = None
-    lastName : str | None = None
+    name: str | None = None
+    lastName: str | None = None
     password: str | None = None
     username: str | None = None
     birthday: date | None = None
@@ -37,12 +46,14 @@ class UserUpdate(UserBase):
     longitude: float | None = None
     photoUrl: str | None = None
 
+
 class User(UserBase):
-    id: int 
+    id: int
     isActive: bool
 
     class Config:
         orm_mode = True
+
 
 class CountryBase(BaseModel):
     name: str
@@ -51,8 +62,10 @@ class CountryBase(BaseModel):
 class CountryCreate(CountryBase):
     pass
 
+
 class CountryUpdate(CountryBase):
     pass
+
 
 class Country(CountryBase):
     id: int
@@ -68,8 +81,10 @@ class CityBase(BaseModel):
 class CityCreate(CityBase):
     pass
 
+
 class CityUpdate(CityBase):
-    id: int 
+    id: int
+
 
 class City(CityBase):
     id: int
