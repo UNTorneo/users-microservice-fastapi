@@ -37,8 +37,11 @@ def createAccessToken(data: dict, expiresDelta: timedelta | None = None):
 
 def createUser(db: Session, user: schemas.UserCreate)-> ResponseModel:
     passwordHashed = getPasswordHash(user.password)
-    dbUser = models.User(username=user.username, hashedPassword=passwordHashed, email=user.email, birthday=user.birthday,
-                          countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude)
+    dbUser = models.User(
+        name=user.name, lastName=user.lastName, username=user.username, hashedPassword=passwordHashed, email=user.email, 
+        birthday=user.birthday,countryId=user.countryId, cityId=user.cityId, latitude=user.latitude, longitude=user.longitude, 
+        photoUrl=user.photoUrl
+    )
     db.add(dbUser)
     db.commit()
     db.refresh(dbUser)
@@ -53,17 +56,20 @@ def getUserByEmail(db: Session, email: str):
 def getUsers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def putUser(db: Session, user: schemas.UserUpdate)-> ResponseModel:
-    dbUser = getUser(db, user.id)
-    passwordHashed = getPasswordHash(user.password)
-    dbUser.username = user.username
-    dbUser.hashedPassword = passwordHashed
-    dbUser.email = user.email
-    dbUser.birthday = user.birthday
-    dbUser.countryId = user.countryId
-    dbUser.cityId = user.cityId
-    dbUser.latitude = user.latitude
-    dbUser.longitude = user.longitude
+
+def putUser(db: Session, user: schemas.UserUpdate, usersId: int) -> ResponseModel:
+    dbUser = getUser(db, usersId)
+    if user.name: dbUser.name = user.name
+    if user.lastName: dbUser.lastName = user.lastName
+    if user.password: dbUser.hashedPassword = getPasswordHash(user.password)
+    if user.username: dbUser.username = user.username
+    if user.email: dbUser.email = user.email
+    if user.birthday: dbUser.birthday = user.birthday
+    if user.countryId: dbUser.countryId = user.countryId
+    if user.cityId: dbUser.cityId = user.cityId
+    if user.latitude: dbUser.latitude = user.latitude
+    if user.longitude: dbUser.longitude = user.longitude
+    if user.photoUrl: dbUser.photoUrl = user.photoUrl
     db.commit()
     return ResponseModel(message="Usuario actualizado exitosamente")
 
@@ -89,8 +95,9 @@ def getCountryByName(db: Session, name: str):
 def getCountries(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Country).offset(skip).limit(limit).all()
 
-def putCountry(db: Session, country: schemas.CountryUpdate)-> ResponseModel:
-    dbCountry = getCountry(db, country.id)
+
+def putCountry(db: Session, country: schemas.CountryUpdate, id: int) -> ResponseModel:
+    dbCountry = getCountry(db, id)
     dbCountry.name = country.name
     db.commit()
     return ResponseModel(message="País actualizado exitosamente")
@@ -117,8 +124,9 @@ def getCityByName(db: Session, name: str):
 def getCities(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.City).offset(skip).limit(limit).all()
 
-def putCity(db: Session, city: schemas.CityUpdate)-> ResponseModel:
-    dbCity = getCity(db, city.id)
+
+def putCity(db: Session, city: schemas.CityBase, id: int) -> ResponseModel:
+    dbCity = getCity(db, id)
     dbCity.name = city.name
     db.commit()
     return ResponseModel(message="Ciudad actualizada exitosamente")

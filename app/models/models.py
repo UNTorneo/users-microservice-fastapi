@@ -6,6 +6,8 @@ class User(base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
+    name = Column(String, nullable=False)
+    lastName = Column(String, nullable=False)
     username = Column(String, unique=True, nullable=False)
     hashedPassword = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
@@ -15,7 +17,7 @@ class User(base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     isActive = Column(Boolean, default=True)
-
+    photoUrl = Column(String, nullable=True)
     country = relationship("Country", back_populates="citizens")
     city = relationship("City", back_populates="citizens")
 

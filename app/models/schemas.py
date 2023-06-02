@@ -3,35 +3,51 @@ from pydantic import BaseModel
 
 class Token(BaseModel):
     accessToken: str
-    tokenType: str
+
 
 class Login(BaseModel):
     email: str
     password: str
 
+
 class UserBase(BaseModel):
-    username : str
-    birthday : date
+    name: str
+    lastName: str
+    username: str
+    birthday: date
     email: str
-    countryId : int
-    cityId : int
-    latitude : float
-    longitude : float 
+    countryId: int
+    cityId: int
+    latitude: float
+    longitude: float
+    photoUrl: str | None = None
 
 
 class UserCreate(UserBase):
     password: str
 
+
 class UserUpdate(UserBase):
-    id: int 
-    password: str
+    name: str | None = None
+    lastName: str | None = None
+    password: str | None = None
+    username: str | None = None
+    birthday: date | None = None
+    email: str | None = None
+    countryId: int | None = None
+    cityId: int | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    photoUrl: str | None = None
+
 
 class User(UserBase):
-    id: int 
+    id: int
     isActive: bool
 
     class Config:
         orm_mode = True
+
 
 class CountryBase(BaseModel):
     name: str
@@ -40,8 +56,10 @@ class CountryBase(BaseModel):
 class CountryCreate(CountryBase):
     pass
 
+
 class CountryUpdate(CountryBase):
-    id: int 
+    pass
+
 
 class Country(CountryBase):
     id: int
@@ -57,11 +75,17 @@ class CityBase(BaseModel):
 class CityCreate(CityBase):
     pass
 
+
 class CityUpdate(CityBase):
-    id: int 
+    id: int
+
 
 class City(CityBase):
     id: int
 
     class Config:
         orm_mode = True
+
+class LoginModel(BaseModel):
+    accessToken: str
+    user: User
